@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 
-async function wsInExpress(app) {
+function wsInExpress(app) {
     const wsServer = new WebSocket.Server({ noServer: true });
     const wsRoutes = [];
     const appListen = app.listen.bind({});
