@@ -5,7 +5,7 @@ async function wsInExpress(app) {
     const wsRoutes = [];
     const appListen = app.listen.bind({});
 
-    app.ws = (path, fn) => wsRoute.push({ path, fn });
+    app.ws = (path, fn) => wsRoutes.push({ path, fn });
     app.listen = (...args) => {
         let server = appListen(...args);
         server.on('upgrade', (req, socket, head) => {
