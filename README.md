@@ -1,24 +1,38 @@
-# wsInExpress
+# wsAwait
 Simple library for adding WebSocket to ExpressApp
 
 # How to use
+
+Client:
 ```js
-const express = require('express');
-const wsInExpress = require('./wsInExpress.js');
+const WebSocket = require('ws');
+const { wsAwait_Client } = require('./wsAwait.js');
 
-const app = express();
-wsInExpress(app);
+const ws = new WebSocket('ws://www.host.com/path');
+wsAwait_Client(ws);
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-app.ws('/', (ws, req) => {
-    ws.send('Hello World!');
-});
+await ws.ready();
 
-app.listen(3000, () => console.log(`Example app listening on port 3000`));
+let msg = await ws.sendAsync('Hello World!!!');
+console.log(msg);
 ```
-- dependencies
-  ```
-  npm i ws
-  ```
+
+Server:
+```js
+const WebSocket = require('ws');
+const { wsAwait_Server } = require('./wsAwait.js');
+
+const wss = new WebSocketServer({ port: 8080 });
+
+wss.on('connection', (ws) => {
+    wsAwait_Server(ws);
+
+    ws.onAsync('message', (rawData, _id, data) => {
+        console.log(`Raw data: ${rawData}`);
+        console.log(`Msg ID: ${_id}`);
+        console.log(`Data: ${data}`);
+
+        ws.sendAsync(_id, 'Hello Program');
+    });
+});
+```
